@@ -17,7 +17,7 @@
 */
 
 // DEBUG: import { b2Assert } from "./b2Settings";
-import { b2_pi, b2_epsilon, b2MakeArray } from "./b2Settings";
+import { b2_pi, b2_epsilon, b2MakeArray, b2Assert } from "./b2Settings";
 
 export const b2_pi_over_180: number = b2_pi / 180;
 export const b2_180_over_pi: number = 180 / b2_pi;
@@ -113,6 +113,16 @@ export class b2Vec2 implements XY {
   constructor(x: number = 0, y: number = 0) {
     this.x = x;
     this.y = y;
+    console.log("HELLO, I AM CONSTRUCTING A FUCKING VECTOR");
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 constructor calculated NaN or Infinite.");
+    } else {
+      console.log("Created valid b2Vec2 with constructor");
+    }
   }
 
   public Clone(): b2Vec2 {
@@ -140,47 +150,104 @@ export class b2Vec2 implements XY {
   public SelfAdd(v: XY): this {
     this.x += v.x;
     this.y += v.y;
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfAdd() calculated NaN or Infinite.");
+    }
     return this;
   }
 
   public SelfAddXY(x: number, y: number): this {
     this.x += x;
     this.y += y;
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfSub() calculated NaN or Infinite.");
+    }
+
     return this;
   }
 
   public SelfSub(v: XY): this {
     this.x -= v.x;
     this.y -= v.y;
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfSub() calculated NaN or Infinite.");
+    }
     return this;
   }
 
   public SelfSubXY(x: number, y: number): this {
     this.x -= x;
     this.y -= y;
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfSubXY() calculated NaN or Infinite.");
+    }
+
     return this;
   }
 
   public SelfMul(s: number): this {
     this.x *= s;
     this.y *= s;
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfMul() calculated NaN or Infinite.");
+    }
     return this;
   }
 
   public SelfMulAdd(s: number, v: XY): this {
     this.x += s * v.x;
     this.y += s * v.y;
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfMul() calculated NaN or Infinite.");
+    }
     return this;
   }
 
   public SelfMulSub(s: number, v: XY): this {
     this.x -= s * v.x;
     this.y -= s * v.y;
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfMul() calculated NaN or Infinite.");
+    }
     return this;
   }
 
   public Dot(v: XY): number {
-    return this.x * v.x + this.y * v.y;
+    const result = this.x * v.x + this.y * v.y;
+    b2Assert(b2IsValid(result));
+
+    if (!b2IsValid(result)) {
+      console.log("b2Vec2 Dot()) calculated NaN or Infinite.");
+    }
+    return result;
   }
 
   public Cross(v: XY): number {
@@ -189,20 +256,45 @@ export class b2Vec2 implements XY {
 
   public Length(): number {
     const x: number = this.x, y: number = this.y;
-    return Math.sqrt(x * x + y * y);
+    const result = Math.sqrt(x * x + y * y);
+
+    b2Assert(b2IsValid(result));
+
+    if (!b2IsValid(result)) {
+      console.log("b2Vec2 Length() calculated NaN or Infinite.");
+    }
+
+    return result;
+
   }
 
   public LengthSquared(): number {
     const x: number = this.x, y: number = this.y;
-    return (x * x + y * y);
+    const result =  (x * x + y * y);
+
+    b2Assert(b2IsValid(result));
+
+    if (!b2IsValid(result)) {
+      console.log("b2Vec2 LengthSquared() calculated NaN or Infinite.");
+    }
+
+    return result;
   }
 
   public Normalize(): number {
     const length: number = this.Length();
     if (length >= b2_epsilon) {
       const inv_length: number = 1 / length;
+
       this.x *= inv_length;
       this.y *= inv_length;
+
+      b2Assert(b2IsValid(this.x));
+      b2Assert(b2IsValid(this.y));
+
+      if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+        console.log("b2Vec2 Normalize() calculated NaN or Infinite.");
+      }
     }
     return length;
   }
@@ -211,8 +303,16 @@ export class b2Vec2 implements XY {
     const length: number = this.Length();
     if (length >= b2_epsilon) {
       const inv_length: number = 1 / length;
+
       this.x *= inv_length;
       this.y *= inv_length;
+
+      b2Assert(b2IsValid(this.x));
+      b2Assert(b2IsValid(this.y));
+
+      if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+        console.log("b2Vec2 SelfNormalize() calculated NaN or Infinite.");
+      }
     }
     return this;
   }
@@ -223,13 +323,14 @@ export class b2Vec2 implements XY {
     const x: number = this.x;
     this.x = c * x - s * this.y;
     this.y = s * x + c * this.y;
-    return this;
-  }
 
-  public SelfRotateCosSin(c: number, s: number): this {
-    const x: number = this.x;
-    this.x = c * x - s * this.y;
-    this.y = s * x + c * this.y;
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfRotate() calculated NaN or Infinite.");
+    }
+
     return this;
   }
 
@@ -239,39 +340,87 @@ export class b2Vec2 implements XY {
 
   public SelfCrossVS(s: number): this {
     const x: number = this.x;
-    this.x =  s * this.y;
+    this.x = s * this.y;
     this.y = -s * x;
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfCrossVS() calculated NaN or Infinite.");
+    }
+
     return this;
   }
 
   public SelfCrossSV(s: number): this {
     const x: number = this.x;
     this.x = -s * this.y;
-    this.y =  s * x;
+    this.y = s * x;
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfCrossSV() calculated NaN or Infinite.");
+    }
+
     return this;
   }
 
   public SelfMinV(v: XY): this {
     this.x = b2Min(this.x, v.x);
     this.y = b2Min(this.y, v.y);
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfMinV() calculated NaN or Infinite.");
+    }
+
     return this;
   }
 
   public SelfMaxV(v: XY): this {
     this.x = b2Max(this.x, v.x);
     this.y = b2Max(this.y, v.y);
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfMaxV() calculated NaN or Infinite.");
+    }
+
     return this;
   }
 
   public SelfAbs(): this {
     this.x = b2Abs(this.x);
     this.y = b2Abs(this.y);
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfAbs() calculated NaN or Infinite.");
+    }
+
     return this;
   }
 
   public SelfNeg(): this {
     this.x = (-this.x);
     this.y = (-this.y);
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfNeg() calculated NaN or Infinite.");
+    }
+
     return this;
   }
 
@@ -279,6 +428,14 @@ export class b2Vec2 implements XY {
     const x: number = this.x;
     this.x = -this.y;
     this.y = x;
+
+    b2Assert(b2IsValid(this.x));
+    b2Assert(b2IsValid(this.y));
+
+    if (!b2IsValid(this.x) || !b2IsValid(this.y)) {
+      console.log("b2Vec2 SelfSkew() calculated NaN or Infinite.");
+    }
+
     return this;
   }
 
@@ -289,24 +446,49 @@ export class b2Vec2 implements XY {
   public static AbsV<T extends XY>(v: XY, out: T): T {
     out.x = b2Abs(v.x);
     out.y = b2Abs(v.y);
+
+    b2Assert(b2IsValid(out.x));
+    b2Assert(b2IsValid(out.y));
+
+    if (!b2IsValid(out.x) || !b2IsValid(out.y)) {
+      console.log("b2Vec2 MakeArray() calculated NaN or Infinite.");
+    }
     return out;
   }
 
   public static MinV<T extends XY>(a: XY, b: XY, out: T): T {
     out.x = b2Min(a.x, b.x);
     out.y = b2Min(a.y, b.y);
+    b2Assert(b2IsValid(out.x));
+    b2Assert(b2IsValid(out.y));
+
+    if (!b2IsValid(out.x) || !b2IsValid(out.y)) {
+      console.log("b2Vec2 MinV() calculated NaN or Infinite.");
+    }
     return out;
   }
 
   public static MaxV<T extends XY>(a: XY, b: XY, out: T): T {
     out.x = b2Max(a.x, b.x);
     out.y = b2Max(a.y, b.y);
+    b2Assert(b2IsValid(out.x));
+    b2Assert(b2IsValid(out.y));
+
+    if (!b2IsValid(out.x) || !b2IsValid(out.y)) {
+      console.log("b2Vec2 MaxV() calculated NaN or Infinite.");
+    }
     return out;
   }
 
   public static ClampV<T extends XY>(v: XY, lo: XY, hi: XY, out: T): T {
     out.x = b2Clamp(v.x, lo.x, hi.x);
     out.y = b2Clamp(v.y, lo.y, hi.y);
+    b2Assert(b2IsValid(out.x));
+    b2Assert(b2IsValid(out.y));
+
+    if (!b2IsValid(out.x) || !b2IsValid(out.y)) {
+      console.log("b2Vec2 ClampV() calculated NaN or Infinite.");
+    }
     return out;
   }
 
@@ -316,6 +498,12 @@ export class b2Vec2 implements XY {
     const s: number = Math.sin(radians);
     out.x = c * v_x - s * v_y;
     out.y = s * v_x + c * v_y;
+    b2Assert(b2IsValid(out.x));
+    b2Assert(b2IsValid(out.y));
+
+    if (!b2IsValid(out.x) || !b2IsValid(out.y)) {
+      console.log("b2Vec2 RotateV() calculated NaN or Infinite.");
+    }
     return out;
   }
 
@@ -329,29 +517,53 @@ export class b2Vec2 implements XY {
 
   public static CrossVS<T extends XY>(v: XY, s: number, out: T): T {
     const v_x: number = v.x;
-    out.x =  s * v.y;
+    out.x = s * v.y;
     out.y = -s * v_x;
+    b2Assert(b2IsValid(out.x));
+    b2Assert(b2IsValid(out.y));
+
+    if (!b2IsValid(out.x) || !b2IsValid(out.y)) {
+      console.log("b2Vec2 CrossVS() calculated NaN or Infinite.");
+    }
     return out;
   }
 
   public static CrossVOne<T extends XY>(v: XY, out: T): T {
     const v_x: number = v.x;
-    out.x =  v.y;
+    out.x = v.y;
     out.y = -v_x;
+    b2Assert(b2IsValid(out.x));
+    b2Assert(b2IsValid(out.y));
+
+    if (!b2IsValid(out.x) || !b2IsValid(out.y)) {
+      console.log("b2Vec2 CrossVOne() calculated NaN or Infinite.");
+    }
     return out;
   }
 
   public static CrossSV<T extends XY>(s: number, v: XY, out: T): T {
     const v_x: number = v.x;
     out.x = -s * v.y;
-    out.y =  s * v_x;
+    out.y = s * v_x;
+    b2Assert(b2IsValid(out.x));
+    b2Assert(b2IsValid(out.y));
+
+    if (!b2IsValid(out.x) || !b2IsValid(out.y)) {
+      console.log("b2Vec2 CrossSV() calculated NaN or Infinite.");
+    }
     return out;
   }
 
   public static CrossOneV<T extends XY>(v: XY, out: T): T {
     const v_x: number = v.x;
     out.x = -v.y;
-    out.y =  v_x;
+    out.y = v_x;
+    b2Assert(b2IsValid(out.x));
+    b2Assert(b2IsValid(out.y));
+
+    if (!b2IsValid(out.x) || !b2IsValid(out.y)) {
+      console.log("b2Vec2 CrossOneV() calculated NaN or Infinite.");
+    }
     return out;
   }
 
@@ -537,7 +749,7 @@ export class b2Mat22 {
   public SetAngle(radians: number): this {
     const c: number = Math.cos(radians);
     const s: number = Math.sin(radians);
-    this.ex.Set( c, s);
+    this.ex.Set(c, s);
     this.ey.Set(-s, c);
     return this;
   }
@@ -573,10 +785,10 @@ export class b2Mat22 {
     if (det !== 0) {
       det = 1 / det;
     }
-    out.ex.x =   det * d;
+    out.ex.x = det * d;
     out.ey.x = (-det * b);
     out.ex.y = (-det * c);
-    out.ey.y =   det * a;
+    out.ey.y = det * a;
     return out;
   }
 
@@ -755,9 +967,9 @@ export class b2Mat33 {
       det = 1 / det;
     }
 
-    M.ex.x =  det * d; M.ey.x = -det * b; M.ex.z = 0;
-    M.ex.y = -det * c; M.ey.y =  det * a; M.ey.z = 0;
-    M.ez.x =        0; M.ez.y =        0; M.ez.z = 0;
+    M.ex.x = det * d; M.ey.x = -det * b; M.ex.z = 0;
+    M.ex.y = -det * c; M.ey.y = det * a; M.ey.z = 0;
+    M.ez.x = 0; M.ez.y = 0; M.ez.z = 0;
   }
 
   public GetSymInverse33(M: b2Mat33): void {
@@ -896,7 +1108,7 @@ export class b2Rot {
   public static MulTRV<T extends XY>(q: b2Rot, v: XY, out: T): T {
     const q_c: number = q.c, q_s: number = q.s;
     const v_x: number = v.x, v_y: number = v.y;
-    out.x =  q_c * v_x + q_s * v_y;
+    out.x = q_c * v_x + q_s * v_y;
     out.y = -q_s * v_x + q_c * v_y;
     return out;
   }
@@ -994,7 +1206,7 @@ export class b2Transform {
     const T_q_c: number = T.q.c, T_q_s: number = T.q.s;
     const p_x: number = v.x - T.p.x;
     const p_y: number = v.y - T.p.y;
-    out.x = ( T_q_c * p_x + T_q_s * p_y);
+    out.x = (T_q_c * p_x + T_q_s * p_y);
     out.y = (-T_q_s * p_x + T_q_c * p_y);
     return out;
   }
